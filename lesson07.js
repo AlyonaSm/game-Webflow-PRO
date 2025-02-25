@@ -30,11 +30,20 @@ const randomGenerate = function(min, max) {
 }
 
 
-
+// Бот-игра 
 const gameBotFunction = function() {
     let mysteryNumber = randomGenerate(1, 100);
     console.log(mysteryNumber)
-    let attempts = 3;
+    let attempts = 2;
+    const checkIsNumber = function(number) {
+        if (isFinite(number)) {
+            return number;
+        } else if (!isNaN(parseFloat(number))) {
+            return parseFloat(number)
+        } else {
+            console.log('Число не введено')
+        }
+    } 
     function askQuestion() {
         let number = prompt('Угадайте число от 0 до 100');
         if (number === null || number === "") {
@@ -42,37 +51,43 @@ const gameBotFunction = function() {
             return
         } 
         let answerNum = checkIsNumber(number);
-        if (answerNum > mysteryNumber) {
-            alert('Попробуйте число поменьше');
-            attempts = attempts-1;
-        } else if (answerNum < mysteryNumber) {
-            alert('Попробуйте число побольше');
-            attempts = attempts-1;
-        } else {
-            if (confirm('Поздравляю с победой! Сыграем еще раз?')) {
-                attempts = 3;
-                mysteryNumber = randomGenerate(1, 100);
-                console.log(mysteryNumber)
-                askQuestion()
+        if (isFinite(answerNum) && answerNum == answerNum.trim()) {
+            if (answerNum > mysteryNumber) {
+                alert('Попробуйте число поменьше');
+                attempts;
+            } else if (answerNum < mysteryNumber) {
+                alert('Попробуйте число побольше');
+                attempts;
             } else {
-                alert('Вы завершили игру');
-                attempts = 0;
-                return;
+                if (confirm('Поздравляю с победой! Сыграем еще раз?')) {
+                    attempts = 2;
+                    mysteryNumber = randomGenerate(1, 100);
+                    console.log(mysteryNumber)
+                    askQuestion()
+                } else {
+                    attempts = 0;
+                    return;
+                }
             }
-        }
-        if (attempts > 0) {
+            if (attempts > 0) {
+                attempts = attempts - 1;
+                askQuestion();
+            } else {
+                if(confirm('Попытки закончились. Хотите попробовать снова?')) {
+                    attempts = 2;
+                    mysteryNumber = randomGenerate(1, 100);
+                    console.log(mysteryNumber)
+                    askQuestion()
+                } else {
+                    alert('Вы завершили игру');
+                    attempts = 0;
+                    return;
+                }
+            } 
+        } else {
+            alert('Введите число');
             askQuestion();
-        } else {
-            if(confirm('Попытки закончились. Хотите попробовать снова?')) {
-                attempts = 3;
-                mysteryNumber = randomGenerate(1, 100);
-                console.log(mysteryNumber)
-                askQuestion()
-            } else {
-                alert('Вы завершили игру');
-                return;
-            }
-        } 
+        }
         return askQuestion;
     }
     askQuestion()
